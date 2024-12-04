@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .quiz-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .answers {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .answers li {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .answers li:hover {
+            background-color: #d3d3d3;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .result {
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .error {
+            font-weight: bold;
+            color: #dc3545;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            display: block;
+            text-align: center;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .next-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>Interactive Quiz</h1>
+
+    <div class="question-container">
+        <div class="question">
+            <p id="question">What is the capital of France?</p>
+        </div>
+        <ul class="answers">
+            <li onclick="checkAnswer('A')">A. Berlin</li>
+            <li onclick="checkAnswer('B')">B. Madrid</li>
+            <li onclick="checkAnswer('C')">C. Paris</li>
+            <li onclick="checkAnswer('D')">D. Rome</li>
+        </ul>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" onclick="nextQuestion()">Next Question</button>
+</div>
+
+<script>
+    let currentQuestion = 0;
+    const questions = [
+        {
+            question: "What is the capital of France?",
+            options: ["Berlin", "Madrid", "Paris", "Rome"],
+            correctAnswer: "C"
+        },
+        {
+            question: "What is 5 + 3?",
+            options: ["5", "8", "7", "10"],
+            correctAnswer: "B"
+        },
+        {
+            question: "Which planet is known as the Red Planet?",
+            options: ["Earth", "Mars", "Jupiter", "Saturn"],
+            correctAnswer: "B"
+        }
+    ];
+
+    function loadQuestion() {
+        const questionObj = questions[currentQuestion];
+        document.getElementById('question').textContent = questionObj.question;
+        const answerElements = document.querySelectorAll('.answers li');
+        answerElements.forEach((element, index) => {
+            element.textContent = `${String.fromCharCode(65 + index)}. ${questionObj.options[index]}`;
+        });
+        document.getElementById('feedback').textContent = "";
+    }
+
+    function checkAnswer(selectedAnswer) {
+        const correctAnswer = questions[currentQuestion].correctAnswer;
+        const feedback = document.getElementById('feedback');
+
+        if (selectedAnswer === correctAnswer) {
+            feedback.textContent = "Correct! Well done!";
+            feedback.classList.add("result");
+            feedback.classList.remove("error");
+        } else {
+            feedback.textContent = "Oops! That's not correct. Try again.";
+            feedback.classList.add("error");
+            feedback.classList.remove("result");
+        }
+    }
+
+    function nextQuestion() {
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            loadQuestion();
+        } else {
+            document.querySelector('.quiz-container').innerHTML = `<h1>Quiz Completed!</h1><p>Thank you for participating!</p>`;
+        }
+    }
+
+    // Load the first question
+    loadQuestion();
+</script>
+
+</body>
+</html>
